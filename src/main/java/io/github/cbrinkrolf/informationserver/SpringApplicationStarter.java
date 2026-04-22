@@ -1,4 +1,4 @@
-package main;
+package io.github.cbrinkrolf.informationserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,7 @@ public class SpringApplicationStarter {
 		System.out.println("start application ...");
 		ConfigurableApplicationContext context = SpringApplication.run(SpringApplicationStarter.class, args);
 
-		context.close();
+		// context.close();
 		System.out.println("... application ended");
 
 	}
