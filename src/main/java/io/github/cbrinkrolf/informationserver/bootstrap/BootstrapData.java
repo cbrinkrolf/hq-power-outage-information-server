@@ -39,7 +39,15 @@ public class BootstrapData implements CommandLineRunner {
 		LocalDateTime start = LocalDateTime.of(2026, 12, 30, 13, 14, 15);
 		o.setStartDateTime(start);
 
+		Outage o1 = new Outage();
+		o1.setLatitude(2);
+		o1.setLongitude(3);
+		o1.setCustomersAffected(41);
+		// LocalDateTime start = LocalDateTime.of(2026, 12, 30, 13, 14, 15);
+		o1.setStartDateTime(start);
+
 		outageRepository.save(o);
+		outageRepository.save(o1);
 		System.out.println("outage saved");
 	}
 }
