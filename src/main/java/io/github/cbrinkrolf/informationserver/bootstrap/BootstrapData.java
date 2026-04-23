@@ -8,27 +8,35 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.cbrinkrolf.informationserver.domain.Outage;
+import io.github.cbrinkrolf.informationserver.domain.Report;
 import io.github.cbrinkrolf.informationserver.repositories.OutageRepository;
+import io.github.cbrinkrolf.informationserver.repositories.ReportRepository;
 import io.github.cbrinkrolf.informationserver.services.OutageService;
+import io.github.cbrinkrolf.informationserver.services.ReportService;
 
 @Component
 public class BootstrapData implements CommandLineRunner {
 
 	private final OutageRepository outageRepository;
 	private final OutageService outageService;
+	private final ReportRepository reportRepository;
+	private final ReportService reportService;
 
 	@Autowired
-	public BootstrapData(OutageRepository outageRepository, OutageService outageService) {
+	public BootstrapData(OutageRepository outageRepository, OutageService outageService,
+			ReportRepository reportRepository, ReportService reportService) {
 		super();
 		this.outageRepository = outageRepository;
 		this.outageService = outageService;
-		System.out.println("bootstrap data loaded");
+		this.reportRepository = reportRepository;
+		this.reportService = reportService;
 	}
 
-	// @Transactional
+	@Transactional
 	@Override
 	public void run(String... args) throws Exception {
 		loadTestData();
+		System.out.println("bootstrap data loaded");
 	}
 
 	private void loadTestData() {
@@ -49,5 +57,20 @@ public class BootstrapData implements CommandLineRunner {
 		outageRepository.save(o);
 		outageRepository.save(o1);
 		System.out.println("outage saved");
+
+		Report r1 = new Report();
+		r1.setId(20180418084019L);
+		r1.getOutages().add(o);
+		r1.getOutages().add(o1);
+		r1.setReportDateTime(start);
+
+		reportRepository.save(r1);
+
+		for (Report r : reportRepository.findAll()) {
+			for (Outage out : r.getOutages()) {
+				System.out.println(out.equals(o));
+			}
+		}
+
 	}
 }

@@ -1,12 +1,15 @@
 package io.github.cbrinkrolf.informationserver.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
@@ -37,6 +40,9 @@ public class Outage {
 	@NotNull
 	@Column(name = "local_date_time", columnDefinition = "TIMESTAMP")
 	private LocalDateTime startDateTime;
+
+	@ManyToMany(mappedBy = "outages")
+	private Set<Report> reports = new HashSet<>();
 
 	public long getId() {
 		return id;
@@ -76,6 +82,14 @@ public class Outage {
 
 	public void setStartDateTime(LocalDateTime startDateTime) {
 		this.startDateTime = startDateTime;
+	}
+
+	public Set<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(Set<Report> reports) {
+		this.reports = reports;
 	}
 
 }
