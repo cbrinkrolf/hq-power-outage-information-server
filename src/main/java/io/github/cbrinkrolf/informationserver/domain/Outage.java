@@ -38,6 +38,14 @@ public class Outage {
 	@Column(name = "local_date_time", columnDefinition = "TIMESTAMP")
 	private LocalDateTime startDateTime;
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public double getLongitude() {
 		return longitude;
 	}

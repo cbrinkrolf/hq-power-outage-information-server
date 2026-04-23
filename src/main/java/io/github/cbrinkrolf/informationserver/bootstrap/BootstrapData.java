@@ -33,8 +33,8 @@ public class BootstrapData implements CommandLineRunner {
 
 	private void loadTestData() {
 		Outage o = new Outage();
-		o.setLatitude(2);
-		o.setLongitude(3);
+		o.setLatitude(45.63760774828376);
+		o.setLongitude(-74.03666800098304);
 		o.setCustomersAffected(40);
 		LocalDateTime start = LocalDateTime.of(2026, 12, 30, 13, 14, 15);
 		o.setStartDateTime(start);
