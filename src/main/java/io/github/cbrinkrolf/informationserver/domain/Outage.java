@@ -2,7 +2,10 @@ package io.github.cbrinkrolf.informationserver.domain;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
+import org.hibernate.annotations.SQLInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,13 +19,14 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+//@SQLInsert(sql = "INSERT INTO OUTAGES (id) VALUES (?) ON DUPLICATE KEY UPDATE id = VALUES(id);")
 @Table(name = "outages", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "local_date_time", "latitude", "longitude", "customers_affected" }) })
 public class Outage {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@NotNull
 	@Column(name = "longitude")
@@ -90,6 +94,26 @@ public class Outage {
 
 	public void setReports(Set<Report> reports) {
 		this.reports = reports;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(customersAffected, id, latitude, longitude, reports, startDateTime);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Outage other = (Outage) obj;
+		return customersAffected == other.customersAffected && Objects.equals(id, other.id)
+				&& Double.doubleToLongBits(latitude) == Double.doubleToLongBits(other.latitude)
+				&& Double.doubleToLongBits(longitude) == Double.doubleToLongBits(other.longitude)
+				&& Objects.equals(reports, other.reports) && Objects.equals(startDateTime, other.startDateTime);
 	}
 
 }

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -18,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 public class Report {
 
 	@Id
-	private long id;
+	private Long id;
 
 	@NotNull
 	@Column(name = "local_date_time", columnDefinition = "TIMESTAMP", unique = true)

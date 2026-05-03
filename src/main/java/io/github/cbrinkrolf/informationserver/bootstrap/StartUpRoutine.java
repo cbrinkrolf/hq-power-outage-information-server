@@ -1,10 +1,9 @@
 package io.github.cbrinkrolf.informationserver.bootstrap;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,30 +18,41 @@ import io.github.cbrinkrolf.informationserver.services.OutageService;
 import io.github.cbrinkrolf.informationserver.services.ReportService;
 
 @Component
-public class BootstrapData implements CommandLineRunner {
+public class StartUpRoutine implements CommandLineRunner {
 
-	private final OutageRepository outageRepository;
-	private final OutageService outageService;
-	private final ReportRepository reportRepository;
-	private final ReportService reportService;
+	private final SQLDataImporterExporter sqlIO;
 
 	@Autowired
-	public BootstrapData(OutageRepository outageRepository, OutageService outageService,
-			ReportRepository reportRepository, ReportService reportService) {
-		super();
-		this.outageRepository = outageRepository;
-		this.outageService = outageService;
-		this.reportRepository = reportRepository;
-		this.reportService = reportService;
+	private OutageRepository outageRepository;
+	@Autowired
+	private OutageService outageService;
+	@Autowired
+	private ReportRepository reportRepository;
+	@Autowired
+	private ReportService reportService;
+
+	public StartUpRoutine(SQLDataImporterExporter sqlIO) {
+		this.sqlIO = sqlIO;
 	}
 
 	@Transactional
 	@Override
 	public void run(String... args) throws Exception {
-		loadTestData();
-		System.out.println("bootstrap data loaded");
-		// exportDB();
-		// System.out.println("database exported");
+		System.out.println("Start-up routine started");
+
+		FileManager fm = new FileManager();
+
+		List<Path> files = fm.getSortedSQLFilePaths(Path.of(System.getProperty("user.dir")));
+
+		String fileName = files.get(files.size() - 1).toFile().getName();
+		System.out.println(fileName);
+
+		// sqlIO.importSQLInserts(new File("backup-20260424-024749_inserts.sql"));
+		// loadTestData();
+		outageRepository.findAll();
+		sqlIO.exportSQLOnlyInserts();
+		System.out.println("Start-up routine ended");
+
 	}
 
 	private void loadTestData() {
@@ -77,21 +87,6 @@ public class BootstrapData implements CommandLineRunner {
 				System.out.println(out.equals(o));
 			}
 		}
-
 	}
 
-	private void exportDB() {
-
-		String backupFile = "backup-"
-				+ java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"))
-				+ ".zip";
-		try (Connection con = DriverManager.getConnection("jdbc:h2:~/test", "sa", "password");
-				PreparedStatement ps = con.prepareStatement("SCRIPT TO '" + backupFile + "'")) {
-			// ps.executeUpdate();
-			ps.executeQuery();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

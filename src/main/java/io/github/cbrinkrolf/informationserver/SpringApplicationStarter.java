@@ -12,6 +12,15 @@ public class SpringApplicationStarter {
 		ConfigurableApplicationContext context = SpringApplication.run(SpringApplicationStarter.class, args);
 
 		// context.close();
+
+		// DataExporter exp = new DataExporter();
+
+		// exp.exportSQL();
+		// exp.importSQL();
+		// exp.exportSQL();
+		// exp.exportSQLOnlyInserts();
+		// exp.importSQLInserts();
+		// exp.exportDBZip();
 		System.out.println("... application ended");
 
 	}
