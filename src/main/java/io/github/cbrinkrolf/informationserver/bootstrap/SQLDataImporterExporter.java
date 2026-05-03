@@ -12,12 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.h2.tools.RunScript;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Component
 public class SQLDataImporterExporter {
 

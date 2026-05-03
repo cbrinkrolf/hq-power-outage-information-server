@@ -33,7 +33,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 @DataJpaTest
 @Import(SQLDataImporterExporter.class)
-@Transactional
+//@Transactional
 class SQLDataImporterExporterTest {
 
 	private final Path resourceDirectory = Paths.get("src", "test", "resources");
@@ -54,7 +54,7 @@ class SQLDataImporterExporterTest {
 	private EntityManagerFactory entityManagerFactory;
 
 	@Test
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	// @Transactional(propagation = Propagation.REQUIRES_NEW)
 	void testImportSQLInsertsBrokenFile() {
 
 		System.out.println("outages from DB: " + outageRepository.findAll().size());
@@ -105,20 +105,20 @@ class SQLDataImporterExporterTest {
 	}
 
 	@Test
-	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+	// @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
 	void insertTest() {
-		Session session = entityManager.unwrap(Session.class);
-		System.out.println(session);
+		// Session session = entityManager.unwrap(Session.class);
+		// System.out.println(session);
 		// sqlIO.showTables();
 
 		System.out.println("outages from DB before saving: " + outageRepository.findAll().size());
 		for (Outage outage : outageRepository.findAll()) {
 			System.out.println("id: " + outage.getId());
-			session.merge(outage);
+			// session.merge(outage);
 			// outageRepository.save(outage);
 			// entityManager.refresh(outage);
 			// entityManager.flush();
-			entityManager.merge(outage);
+			// entityManager.merge(outage);
 			// session.refresh(outage);
 		}
 
@@ -142,7 +142,7 @@ class SQLDataImporterExporterTest {
 		// session.refresh(o1);
 		// session.close();
 
-		SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+		// SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
 		// session = sessionFactory.openSession();
 
 		System.out.println("outages from DB before saving: " + outageRepository.findAll().size());
